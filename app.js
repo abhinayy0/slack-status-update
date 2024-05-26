@@ -86,18 +86,18 @@ const app = new App({
   app.command("/status-update", async ({ command, ack, respond }) => {
     // Acknowledge command request
     await ack();
-    console.log("acknowledgement", command);
-    let reply = command.text;
+    const user = await User.findOne({
+      where: { userId: command.user_id },
+    });
     await app.client.users.profile.set({
-      token: process.env.SLACK_BOT_TOKEN,
-
+      token: user.accessToken,
       profile: {
-        status_text: "riding a train",
+        status_text: command.text,
         status_emoji: ":train:",
         status_expiration: 1532627506,
       },
     });
 
-    await respond(reply);
+    await respond("Status updated to " + command.text);
   });
 })();
