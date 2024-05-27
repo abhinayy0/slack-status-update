@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,13 +8,30 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-function createData(slackConnection: string, slackTeam: string) {
-  return { slackConnection, slackTeam };
-}
+// function createData(slackConnection: string, slackTeam: string) {
+//   return { slackConnection, slackTeam };
+// }
 
-const rows = [createData("user B", "Nokia"), createData("user A", "Airtel")];
+// const rows = [createData("user B", "Nokia"), createData("user A", "Airtel")];
 
-export default function BasicTable() {
+const BasicTable: React.FC = () => {
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:3000/api/connections"
+        );
+        setRows(response.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -39,4 +57,6 @@ export default function BasicTable() {
       </Table>
     </TableContainer>
   );
-}
+};
+
+export default BasicTable;
