@@ -1,14 +1,14 @@
 const { Sequelize, Model, DataTypes } = require("sequelize");
 
 // Initialize Sequelize with SQLite database
-const sequelize = new Sequelize({
+export const sequelize = new Sequelize({
   dialect: "sqlite",
   storage: "./database.sqlite",
 });
 
 // Define a model
-class User extends Model {}
-class SlackConnection extends Model {}
+export class User extends Model {}
+export class SlackConnection extends Model {}
 
 User.init(
   {
@@ -41,4 +41,3 @@ SlackConnection.init(
 User.hasMany(SlackConnection, { as: "connections" });
 SlackConnection.belongsTo(User);
 
-module.exports = { User, SlackConnection };
